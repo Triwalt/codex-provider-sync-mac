@@ -1,0 +1,29 @@
+name: Build
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  macos:
+    runs-on: macos-14
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Show Swift version
+        run: swift --version
+
+      - name: Build debug
+        run: swift build
+
+      - name: Package app bundle
+        run: ./scripts/package_app.sh
+
+      - name: Upload packaged app
+        uses: actions/upload-artifact@v4
+        with:
+          name: codex-provider-sync-mac
+          path: dist/Codex Provider Sync.zip
